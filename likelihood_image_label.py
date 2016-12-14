@@ -117,7 +117,7 @@ def likelihood(img,obj_img,bg_img) :
 	#plt.plot(L)
 	#plt.show()
 	# for creating likelihood image
-	L_=((L+4.0)*255.0)/8 
+	L_=((L+4)*255)/8 
 	print L_
 	'''for i in range(32) :
 		if L_[i]>127 :
@@ -207,6 +207,7 @@ if __name__ == "__main__":
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	cv2.imshow("see",image)
+
 	list_feature_images=feature_images(image)
 	list_object_images =feature_images(obj_img)
 	list_bg_images     =feature_images(bg_img_original)
@@ -230,10 +231,12 @@ if __name__ == "__main__":
 
 	fig = plt.figure(figsize=(20,10))
 	fig.suptitle('likelihood images according to variance ratio values', fontsize=14, fontweight='bold')
+
 	for i in range(49):
 		plt.subplot(7,7,i+1)
-		plt.imshow(list_feature_images[sorted_VR[i]],cmap='gray')
+		plt.imshow(list_likelihood_images[sorted_VR[i]],cmap='gray')
 		plt.axis('off')
-	plt.subplot_tool()
+
+	#plt.subplot_tool()
 	plt.show()
 	fig.savefig("result.png")
