@@ -111,14 +111,24 @@ def likelihood(img,obj_img,bg_img) :
 	print "variance=",VR
 	#plotting likelihood
 	#plt.figure()
-	#x=[0,35]
-	#y=[0,0]
+	x=[0,35]
+	y=[127,127]
 	#plt.plot(x,y,color='black')
 	#plt.plot(L)
 	#plt.show()
-
+	# for creating likelihood image
+	L_=((L+4.0)*255.0)/8 
+	print L_
+	for i in range(32) :
+		if L_[i]>127 :
+			L_[i]=255
+		elif L_[i]<127 :
+			L_[i]=0
+		else :
+			L_[i]=127
+				
 	img=img/8
-	likelihood_img=L[img]  # creating likelihood image
+	likelihood_img=L_[img]  # creating likelihood image
 
 	#cv2.imshow("like",likelihood_img)
 	#cv2.waitKey(0)
@@ -142,8 +152,10 @@ if __name__ == "__main__":
 	
 	if (len(argument)<2) :
 		print "\n \n provide an image as input\n\n"
-		sys.exit()
-	image=cv2.imread(str(argument[1])) # complete image of the scene
+
+		image=cv2.imread("cliffjump.jpg")
+	if (len(argument)==2):	
+		image=cv2.imread(str(argument[1])) # complete image of the scene
 
 	clone=image.copy()
 	img_copy=image.copy()
@@ -163,6 +175,7 @@ if __name__ == "__main__":
 		# if the 'r' key is pressed, reset the cropping region
 		if key == ord("r"):
 			image = clone.copy()
+			img_copy=image.copy()
 	 
 		# if the 'c' key is pressed, break from the loop
 		elif key == ord("c"):
@@ -198,6 +211,7 @@ if __name__ == "__main__":
 	list_bg_images     =feature_images(bg_img_original)
 	list_VR=[]
 	list_likelihood_images=[]
+
 	for i in range(49) :
 
 		likelihood_image,VR = likelihood(list_feature_images[i],list_object_images[i],list_bg_images[i])
@@ -217,7 +231,7 @@ if __name__ == "__main__":
 	fig.suptitle('likelihood images according to variance ratio values', fontsize=14, fontweight='bold')
 	for i in range(49):
 		plt.subplot(7,7,i+1)
-		plt.imshow(list_likelihood_images[sorted_VR[i]],cmap='gray')
+		plt.imshow(list_feature_images[sorted_VR[i]],cmap='gray')
 		plt.axis('off')
 	plt.subplot_tool()
 	plt.show()
